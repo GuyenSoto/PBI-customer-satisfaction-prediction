@@ -31,6 +31,16 @@ This project implements a predictive model that helps businesses anticipate cust
 ![Enhanced Prediction App Recommendations](prediction_app_enhanced4_2025-05-02%20101351.jpg)
 *Risk factors and specific action recommendations*
 
+### Power BI Dashboard
+![Happy Customers Dashboard Overview](Happy_Customers1_2025-05-03%20105036.jpg)
+*Main dashboard overview with key metrics and visualizations*
+
+![Happy Customers Detailed Analytics](Happy_Customers2_2025-05-03%20105036.jpg)
+*Detailed analytics view showing customer satisfaction trends*
+
+![Happy Customers Interactive Reports](Happy_Customers3_2025-05-03%20105036.jpg)
+*Interactive reports for business intelligence insights*
+
 ## Project Structure
 
 - `ensemble_model.py`: Core implementation of the voting ensemble model
