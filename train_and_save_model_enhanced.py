@@ -95,7 +95,7 @@ def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='OUTP
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    # Guardar los archivos en la raíz del proyecto para asegurar que la aplicación pueda encontrarlos
+    # Save files in the root directory to ensure the app can find them
     with open('ensemble_model_enhanced.pkl', 'wb') as f:
         pickle.dump(vote, f)
     
@@ -105,11 +105,11 @@ def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='OUTP
     with open('feature_info_enhanced.pkl', 'wb') as f:
         pickle.dump(feature_info, f)
     
-    # También guardar nombres de columnas para verificación durante la predicción
+    # Also save column names for verification during prediction
     with open('feature_columns_enhanced.pkl', 'wb') as f:
         pickle.dump(list(X_enhanced.columns), f)
     
-    # También guardar copias en la carpeta OUTPUT
+    # Also save copies in the OUTPUT folder
     with open(os.path.join(output_dir, 'ensemble_model_enhanced.pkl'), 'wb') as f:
         pickle.dump(vote, f)
     

@@ -9,12 +9,12 @@ from sklearn.preprocessing import StandardScaler
 import os
 import datetime
 
-# Definir la carpeta de salida para las imágenes
-OUTPUT_DIR = "OUTPUT"  # Cambiado a mayúsculas para coincidir con la estructura existente
+# Define output directory for images
+OUTPUT_DIR = "OUTPUT"
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
-# Función para guardar figuras con marca de tiempo
+# Function to save figures with timestamp
 def save_figure(fig, base_name):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H%M%S")
     filename = f"{base_name}_{timestamp}.jpg"
@@ -29,16 +29,12 @@ st.write("This application predicts whether a customer will be satisfied with th
 # Load the trained model (previously saved)
 @st.cache_resource
 def load_model():
-    model_path = 'ensemble_model_enhanced.pkl'
-    scaler_path = 'scaler_enhanced.pkl'
-    feature_info_path = 'feature_info_enhanced.pkl'
-    
     try:
-        with open(model_path, 'rb') as file:
+        with open('ensemble_model_enhanced.pkl', 'rb') as file:
             model = pickle.load(file)
-        with open(scaler_path, 'rb') as file:
+        with open('scaler_enhanced.pkl', 'rb') as file:
             scaler = pickle.load(file)
-        with open(feature_info_path, 'rb') as file:
+        with open('feature_info_enhanced.pkl', 'rb') as file:
             feature_info = pickle.load(file)
         return model, scaler, feature_info
     except FileNotFoundError:
@@ -77,7 +73,7 @@ if model is not None and feature_columns is not None:
     sns.barplot(x='Importance', y='Feature', data=importance_df[:10], ax=ax)
     st.sidebar.pyplot(fig)
     
-    # Guardar la figura de importancia de características
+    # Save the feature importance figure
     save_figure(fig, "feature_importance_sidebar")
     
     # Add feature description legend
@@ -199,7 +195,7 @@ if model is not None and feature_columns is not None:
         ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'])
         st.pyplot(fig)
         
-        # Guardar la visualización de resultados
+        # Save the results visualization
         save_figure(fig, "prediction_result")
         
         # Show interpretation
@@ -270,7 +266,7 @@ if model is not None and feature_columns is not None:
             if len(risk_factors) >= 3:
                 st.write("- **VIP Attention**: This order requires special supervision. Consider assigning a manager to monitor the entire process.")
                 
-            # Guardar la vista de recomendaciones
+            # Save the recommendations view
             plt.figure(figsize=(10, 6))
             plt.text(0.5, 0.5, "Risk Factors & Recommendations", fontsize=20, ha='center')
             plt.axis('off')
