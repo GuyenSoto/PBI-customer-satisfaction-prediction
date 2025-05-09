@@ -10,7 +10,7 @@ from lightgbm import LGBMClassifier
 from sklearn.svm import SVC
 import os
 
-def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='.'):
+def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='OUTPUT'):
     """Train the model and save it for future use with enhanced features"""
     
     print(f"Loading data from {input_file}...")
@@ -95,6 +95,21 @@ def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='.'):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
+    # Guardar los archivos en la raíz del proyecto para asegurar que la aplicación pueda encontrarlos
+    with open('ensemble_model_enhanced.pkl', 'wb') as f:
+        pickle.dump(vote, f)
+    
+    with open('scaler_enhanced.pkl', 'wb') as f:
+        pickle.dump(scaler, f)
+    
+    with open('feature_info_enhanced.pkl', 'wb') as f:
+        pickle.dump(feature_info, f)
+    
+    # También guardar nombres de columnas para verificación durante la predicción
+    with open('feature_columns_enhanced.pkl', 'wb') as f:
+        pickle.dump(list(X_enhanced.columns), f)
+    
+    # También guardar copias en la carpeta OUTPUT
     with open(os.path.join(output_dir, 'ensemble_model_enhanced.pkl'), 'wb') as f:
         pickle.dump(vote, f)
     
@@ -104,11 +119,10 @@ def train_save_model(input_file='ACME-HappinessSurvey2020.csv', output_dir='.'):
     with open(os.path.join(output_dir, 'feature_info_enhanced.pkl'), 'wb') as f:
         pickle.dump(feature_info, f)
     
-    # Also save column names for verification during prediction
     with open(os.path.join(output_dir, 'feature_columns_enhanced.pkl'), 'wb') as f:
         pickle.dump(list(X_enhanced.columns), f)
     
-    print(f"Enhanced model and associated files saved to {output_dir}")
+    print(f"Enhanced model and associated files saved to root directory and {output_dir}")
     print("Run the enhanced Streamlit app with: streamlit run prediction_app_enhanced.py")
 
 if __name__ == "__main__":

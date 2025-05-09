@@ -6,6 +6,21 @@ import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
+import os
+import datetime
+
+# Definir la carpeta de salida para las imágenes
+OUTPUT_DIR = "OUTPUT"  # Cambiado a mayúsculas para coincidir con la estructura existente
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+
+# Función para guardar figuras con marca de tiempo
+def save_figure(fig, base_name):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H%M%S")
+    filename = f"{base_name}_{timestamp}.jpg"
+    filepath = os.path.join(OUTPUT_DIR, filename)
+    fig.savefig(filepath, dpi=300, bbox_inches='tight')
+    return filepath
 
 # Title and description
 st.title("Enhanced Customer Satisfaction Predictor")
@@ -14,12 +29,16 @@ st.write("This application predicts whether a customer will be satisfied with th
 # Load the trained model (previously saved)
 @st.cache_resource
 def load_model():
+    model_path = 'ensemble_model_enhanced.pkl'
+    scaler_path = 'scaler_enhanced.pkl'
+    feature_info_path = 'feature_info_enhanced.pkl'
+    
     try:
-        with open('ensemble_model_enhanced.pkl', 'rb') as file:
+        with open(model_path, 'rb') as file:
             model = pickle.load(file)
-        with open('scaler_enhanced.pkl', 'rb') as file:
+        with open(scaler_path, 'rb') as file:
             scaler = pickle.load(file)
-        with open('feature_info_enhanced.pkl', 'rb') as file:
+        with open(feature_info_path, 'rb') as file:
             feature_info = pickle.load(file)
         return model, scaler, feature_info
     except FileNotFoundError:
@@ -57,6 +76,9 @@ if model is not None and feature_columns is not None:
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x='Importance', y='Feature', data=importance_df[:10], ax=ax)
     st.sidebar.pyplot(fig)
+    
+    # Guardar la figura de importancia de características
+    save_figure(fig, "feature_importance_sidebar")
     
     # Add feature description legend
     st.sidebar.header("Feature Descriptions")
@@ -177,6 +199,9 @@ if model is not None and feature_columns is not None:
         ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'])
         st.pyplot(fig)
         
+        # Guardar la visualización de resultados
+        save_figure(fig, "prediction_result")
+        
         # Show interpretation
         if prediction == 1:
             st.success(f"Prediction: Customer SATISFIED (Probability: {probability:.1%})")
@@ -211,14 +236,6 @@ if model is not None and feature_columns is not None:
             risk_factors.append(("Previous Courier Dissatisfaction", 
                                   "The customer has had negative experiences with the delivery service."))
         
-        # Optional debugging info
-        # st.write("Debug information:")
-        # st.write(f"X1 value: {x1}, Threshold: 3.5")
-        # st.write(f"Distance value: {distance}, Threshold: 10")
-        # st.write(f"Estimated time value: {estimated_time}, Threshold: 45")
-        # st.write(f"Order complexity: {order_complexity}, Threshold: 7")
-        # st.write(f"X5 value: {x5}, Threshold: 3.0")
-        
         # Show specific recommendations based on analysis
         if prediction == 0 or probability < 0.7:
             st.write("⚠️ **Risk factors have been detected in this order:**")
@@ -252,6 +269,15 @@ if model is not None and feature_columns is not None:
             # General recommendation if many risk factors
             if len(risk_factors) >= 3:
                 st.write("- **VIP Attention**: This order requires special supervision. Consider assigning a manager to monitor the entire process.")
+                
+            # Guardar la vista de recomendaciones
+            plt.figure(figsize=(10, 6))
+            plt.text(0.5, 0.5, "Risk Factors & Recommendations", fontsize=20, ha='center')
+            plt.axis('off')
+            plt.tight_layout()
+            fig_rec = plt.gcf()
+            save_figure(fig_rec, "prediction_recommendations")
+            
         else:
             st.write("👍 **The customer will likely be satisfied, but you can improve even more:**")
             
