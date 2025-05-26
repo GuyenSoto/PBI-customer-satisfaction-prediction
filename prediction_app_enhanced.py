@@ -129,7 +129,7 @@ if model is not None and feature_columns is not None:
         distance = st.number_input("Delivery distance (km)", 0.1, 20.0, 5.0, 0.1,
                                   help="Distance in kilometers from distribution center to customer")
         
-        estimated_time = st.number_input("Estimated delivery time (minutes)", 10, 120, 30, 5,
+        estimated_time = st.number_input("Estimated delivery time (minutes)",10, 120, 30, 5,
                                        help="Total estimated time from order confirmation to delivery")
     
     with log_col2:
@@ -202,7 +202,9 @@ if model is not None and feature_columns is not None:
         if prediction == 1:
             st.success(f"Prediction: Customer SATISFIED (Probability: {probability:.1%})")
         else:
-            st.error(f"Prediction: Customer UNSATISFIED (Probability: {probability:.1%})")
+            #st.error(f"Prediction: Customer UNSATISFIED (Probability: {probability:.1%})")
+            unsatisfied_probability = 1 - probability
+            st.error(f"Prediction: Customer UNSATISFIED (Probability: {unsatisfied_probability:.1%})")
             
         # Recommendations based on analysis
         st.header("Recommendations")
