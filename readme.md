@@ -1,6 +1,6 @@
 # Customer Satisfaction Prediction System
 
-A machine learning-based system for predicting customer satisfaction with delivery services before the delivery occurs, using ensemble modeling techniques and Streamlit for visualization.
+A machine learning-based system for predicting customer satisfaction with delivery services before the delivery occurs, using ensemble modeling techniques and Streamlit for visualization. 
 
 ## Overview
 
